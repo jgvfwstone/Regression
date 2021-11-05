@@ -3,7 +3,7 @@ MatLab and Python code for use with the book "Linear Regression", 2022:
 
 [Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/) **by James V Stone**
 
-Chapter 1, plus reviews etc can be seen here https://jim-stone.staff.shef.ac.uk/Regression
+Chapter 1 can be seen here https://jim-stone.staff.shef.ac.uk/Regression
 
 Note that the book is principally about the mathematics of linear regression.
 This repository is intended to provide 'taster' code, rather than an exercise in how to program regression. 
