@@ -140,3 +140,5 @@ fprintf('F =%.3f\n',FFullMinusRed); % F=1.529
 pFullMinusRed = mFCDF(FFullMinusRed, numparamsRed-1, n-numparamsRed);
 fprintf('p-value of Full Minus Reduced model = %.3f\n',pFullMinusRed); 
 %  0.221
+
+% END OF FILE.
