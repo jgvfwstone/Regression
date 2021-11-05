@@ -1,13 +1,11 @@
 # Regression
-MatLab and Python code to accompany my book called "Linear Regression", 2022.
-Chapter 1, plus reviews etc can be seen here https://jim-stone.staff.shef.ac.uk/Regression
-# Artificial Intelligence Engines
-
-Computer code for use with the book: 
+MatLab and Python code for use with the book "Linear Regression", 2022:
 
 [Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/)
  
 **by James V Stone**
+
+Chapter 1, plus reviews etc can be seen here https://jim-stone.staff.shef.ac.uk/Regression
 
 This file is: https://github.com/jgvfwstone/Regression
 
