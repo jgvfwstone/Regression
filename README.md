@@ -1,13 +1,9 @@
 # Regression
 MatLab and Python code for use with the book "Linear Regression", 2022:
 
-[Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/)
- 
-**by James V Stone**
+[Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/) **by James V Stone**
 
 Chapter 1, plus reviews etc can be seen here https://jim-stone.staff.shef.ac.uk/Regression
-
-This file is: https://github.com/jgvfwstone/Regression
 
 Note that the book is principally about the mathematics of linear regression.
 This repository is intended to provide 'taster' code, rather than an exercise in how to program regression. 
@@ -27,3 +23,5 @@ There is a README file within each directory.
 
 Each example has been tested on a mac (System Version:	OS X 10.15.7), MacBook Air 1.6GHz.
 Python examples have been tested using the Spyder (3.3.2) python application with Python 3.7.0.
+
+This file is: https://github.com/jgvfwstone/Regression
