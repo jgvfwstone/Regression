@@ -25,3 +25,5 @@ fprintf('tymean = %.3f\n',tymean); % = 16.997
 
 p=mTCDF(tymean,n-1);
 fprintf('p = %.3e\n',p); % p = 9.234e-10
+
+% END OF FILE.
