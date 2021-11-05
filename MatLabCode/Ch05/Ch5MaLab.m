@@ -45,3 +45,4 @@ F = r2/(numparams-1) / ((1-r2)/(n-numparams)); % 9.6172
 p = mFCDF(F, numparams-1, n-numparams);
 fprintf('p from F ratio = %.3f\n',r2);        % 0.0101
 
+% END OF FILE.
