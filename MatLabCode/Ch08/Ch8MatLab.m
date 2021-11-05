@@ -59,7 +59,7 @@ fprintf('SSNoise = %.3f\n', SSNoise);
 num = r2/(numparams-1);
 den = (1-r2) / (n-numparams);
 F = num  / den;
-p = 1 - fcdfA(F,numparams-1,n-numparams);
+p = mFCDF(F,numparams-1,n-numparams);
 
 fprintf('Model fit: F = %.3f\n',F);
 fprintf('Model fit: p = %.4f\n',p);
@@ -89,3 +89,5 @@ fprintf('\nb0 = %.3f\n', b0);
 fprintf('std(b0) = %.3f\n', stdb0);
 fprintf('t(b0) = %.3f\n', tb0);
 fprintf('p(b0) = %.3f\n',pb0); % = 0.006
+
+% END OF FILE.
