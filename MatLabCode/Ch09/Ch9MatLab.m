@@ -90,3 +90,5 @@ fprintf('p-value of NL Minus Lin model = %.3f\n',pNLMinusLin); %=0.730
 b0 = paramsLin(1); b1 = paramsLin(2);
 yhatforlineLIN = b1.*xforline + b0; % points on line.
 figure(1); hold on; plot(xforline,yhatforlineLIN,'k--'); %
+
+% END OF FILE.
