@@ -1,2 +1,2 @@
 # Regression
-Computer code (MatLab and Python) for regression book.
+MatLab and Python code to accompany my book called "Linear Regression", 2022.
