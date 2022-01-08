@@ -1,4 +1,4 @@
-# Regression
+# Linear Regression
 MatLab and Python code for use with the book "Linear Regression", 2022:
 
 [Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/) **by James V Stone**
