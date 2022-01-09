@@ -16,8 +16,8 @@ However, to download a single file
 2) click on the RAW button in the upper right
 3) use the browser "save as ..." menu to save the file to your computer. 
 
-**How To ...**
-There is a README file within each directory. 
+OR
+The complete set of Python or Matlab files can be downloaded in the two zip files in the Matlab or Python directories.
 
 **System Requirements**
 
