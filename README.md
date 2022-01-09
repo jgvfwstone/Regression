@@ -1,5 +1,5 @@
 # Linear Regression
-MatLab and Python code for use with the book "Linear Regression", 2022:
+MatLab and Python code for use with the book:
 
 [Linear Regression](https://jim-stone.staff.shef.ac.uk/Regression/) **by James V Stone**
 
