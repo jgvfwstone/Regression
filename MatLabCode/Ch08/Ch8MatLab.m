@@ -1,4 +1,5 @@
-% Ch8MatLab.m
+% Ch8MatLab.m. 
+% The functions mFCDF and mTCDF are listed in Appendix F.
 
 % data used in regression book
 x=[1.00 1.25 1.50 1.75 2.00 2.25 2.50 2.75 3.00 3.25 3.50 3.75 4.00]';
@@ -31,29 +32,27 @@ b1 = b(2); % estimated slope b1.
 b0 = b(1); % estimated intercept b0.
 yhat = X*b; % data projected onto best fitting line.
 
-fprintf('slope = %.3f\n', b1);
-fprintf('intercept = %.3f\n', b0);
+fprintf('slope b1 = %.3f.\n', b1);
+fprintf('intercept b0 = %.3f.\n', b0);
 
 % Find weighted mean.
 ymean = sum(ycol.*ws/sum(ws));  
 
 SSExplained = (yhat-ymean)' * W * (yhat - ymean); 
-
 SSNoise = (ycol-yhat)' * W * (ycol - yhat);
-
 SST = (ycol - ymean)' * W * (ycol - ymean);
-
 SSx =  sum( (xcol - xmean).^2 );
 
-% variance accounted for ...
+
+% variance accounted for by model ...
 r2 = 1 - SSNoise / SST; % 0.452
 r2adjusted = 1 - 1/(n-numparams)*SSNoise / (1/(n-1) * SST);
 
-fprintf('r2 = %.3f\n', r2);
-fprintf('r2adjusted = %.3f\n', r2adjusted);
-fprintf('\nSST = %.3f\n', SST);
-fprintf('SSExplained = %.3f\n', SSExplained);
-fprintf('SSNoise = %.3f\n', SSNoise);
+fprintf('Variance accounted for, r2 = %.3f.\n', r2);
+fprintf('r2adjusted = %.3f.\n', r2adjusted);
+fprintf('\nSST (SS total) = %.3f.\n', SST);
+fprintf('SSExplained = %.3f.\n', SSExplained);
+fprintf('SSNoise = %.3f.\n', SSNoise);
 
 % F ratio
 num = r2/(numparams-1);
@@ -61,13 +60,10 @@ den = (1-r2) / (n-numparams);
 F = num  / den;
 p = mFCDF(F,numparams-1,n-numparams);
 
-fprintf('Model fit: F = %.3f\n',F);
-fprintf('Model fit: p = %.4f\n',p);
+fprintf('\nModel fit: F ratio = %.3f.\n',F); % 9.075.
+fprintf('Model fit: p-value = %.4f.\n',p); % 0.0118
 
-% Weighted Model fit: p = 0.0118
-% Simple Model fit: p = 0.0101
-
-% Significance of individual parameters.
+% Find significance of individual parameters.
 varXmatrix = SSNoise/(n-numparams) * inv(X' * W * X);
 
 stdb0 = sqrt(varXmatrix(1,1));
@@ -80,14 +76,14 @@ tb0 = b0/stdb0;
 pb0=mTCDF(tb0,n-numparams);
 pb1=mTCDF(tb1,n-numparams);
 
-fprintf('\nb1 = %.3f\n', b1);
-fprintf('std(b1) = %.3f\n', stdb1);
-fprintf('t(b1) = %.3f\n', tb1);
-fprintf('p(b1) = %.3f\n',pb1); % = 0.012
+fprintf('\nb1 = %.3f.\n', b1);
+fprintf('standard error of b1 = %.3f.\n', stdb1);
+fprintf('t-value of b1 = %.3f.\n', tb1);
+fprintf('p-value of b1 = %.3f.\n',pb1); % = 0.012
 
-fprintf('\nb0 = %.3f\n', b0);
-fprintf('std(b0) = %.3f\n', stdb0);
-fprintf('t(b0) = %.3f\n', tb0);
-fprintf('p(b0) = %.3f\n',pb0); % = 0.006
+fprintf('\nb0 = %.3f.\n', b0);
+fprintf('standard error of b0 = %.3f.\n', stdb0);
+fprintf('t-value of b0 = %.3f.\n', tb0);
+fprintf('p-value of b0 = %.3f.\n',pb0); % = 0.006
 
 % END OF FILE.
