@@ -6,6 +6,8 @@ MatLab and Python code for use with the book:
 Chapter 1 can be seen here https://jim-stone.staff.shef.ac.uk/Regression
 
 Note that the book is principally about the mathematics of linear regression.
+Each Matlab file here is printed at the end of one chapter in Linear Regression with Matlab.
+Each Python file here is printed at the end of one chapter in Linear Regression with Python.
 This repository is intended to provide 'taster' code, rather than an exercise in how to program regression. 
 
 **Downloading Single Files**
