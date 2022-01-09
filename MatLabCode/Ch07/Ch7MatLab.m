@@ -1,144 +1,142 @@
-% Ch7MatLab.m
+% Ch7MatLab.m. The function mFCDF and mTCDF are in Appendix F.
 % Multivariate regression with two regressors x1 and x2.
-
-clear all;
-
 x1=[1.00 1.25 1.50 1.75 2.00 2.25 2.50 2.75 3.00 3.25 3.50 3.75 4.00]; 
-x2=[7.47 9.24 3.78 1.23 5.57 4.48 4.05 4.19 0.05 7.20 2.48 1.73  2.37];
+x2=[7.47 9.24 3.78 1.23 5.57 4.48 4.05 4.19 0.05 7.20 2.48 1.73 2.37];
 y=[3.34 4.97 4.15 5.40 5.21 4.56 3.69 5.86 4.58 6.94 5.57 5.62 6.87]; 
 
-% standardize data to have unit variance?
-donorm=0;
-if donorm
-    y=y/std(y,1);
-    x1=x1/std(x1,1);
-    x2=x2/std(x2,1);
+donorm=0; 
+if donorm % Use normalised data to compare coefficients.
+    y=y/std(y,1);  x1=x1/std(x1,1); x2=x2/std(x2,1);
+    fprintf('\nWARNING: USING NORMALISED REGRESSORS.\n');
 end
-
-% number of data points.
-n = length(y);
-x1col = x1';
-x2col = x2';
-ycol = y';
-ymean=mean(ycol);
-
+n = length(y); % number of data points.
+x1col = x1';    x2col = x2';
+ycol = y'; % define ycol column vector for vector-matrix algebra.
+ymean = mean(ycol);
+%%%%%%%%%%%%%%%%
 % FULL MODEL
-% make array of data.
-X = [ones(size(ycol))  x1col x2col]; % Prepend ones to intercept term.
-numparamsFull = length(X(1,:));
-% Get fitted weighted  regression plane.
+%%%%%%%%%%%%%%%%
+fprintf('FULL MODEL ...\n'); 
+% make array of data for full model.
+X = [ones(size(ycol))  x1col x2col]; % Prepend ones for intercept term.
+numparamsFull = length(X(1,:)); % 3 =two slopes plus one intercept.
+% Get best fitting  regression plane.
 params = inv( X'  * X) * X' * ycol;
-% params = 2.1484    0.9664    0.1378
-yhat = X*params;
-r2 = var(yhat,1)/var(y,1); % 0.5472 
+
+b0 = params(1); % intercept.
+b1 = params(2); % first slope.
+b2 = params(3); % second slope.
+fprintf('\nfirst slope b1 = %.3f.\n',b1); % 0.966.
+fprintf('second slope b2 = %.3f.\n',b2); % 0.138.
+fprintf('intercept b0 = %.3f.\n\n',b0); % 2.148.
+
+yhat = X*params; % Find projection of data onto plane.
+% Find coefficient of determination, r2.
+r2 = var(yhat,1)/var(y,1); % 0.548.
 
 % Assess overall fit.
-% IN F-TABLE  df numerator = 2,  df denominator = 10
+% IN F-TABLE  df numerator = 2,  df denominator = 10.
 numFull = r2/(numparamsFull-1);
 denFull = (1-r2)/(n-numparamsFull);
-FFull = numFull/denFull; %  F=6.0634 => p= 0.0189
-SSExplainedFull = sum((yhat-ymean).^2); % 7.804
-
+FFull = numFull/denFull; %  F = 6.0634 => p= 0.0189.
+SSExplainedFull = sum((yhat-ymean).^2); % 7.805.
+fprintf('SS Explained of full model = %.3f.\n',SSExplainedFull); % 7.805.
 pfull = mFCDF(FFull, numparamsFull-1, n-numparamsFull);
+fprintf('p-value of full model = %.3f.\n',pfull); % 0.0189.
 
-intercept = params(1); % intercept
-slope1 = params(2);
-slope2 = params(3);
-
-fprintf('\nslope1 = %.3f\n',slope1);
-fprintf('slope2 = %.3f\n',slope2);
-fprintf('intercept = %.3f\n\n',intercept);
-fprintf('p-value full model = %.3f\n',pfull);
-
-% M = 3 x 3 matrix of variances for parameters.
-E = sum((ycol-yhat).^2);
-
-% diagonal matrix of sems
-M = E/(n-numparamsFull) * inv(X'*X);
-
+SSNoise = sum( (ycol-yhat).^2 ); % Sum of squared noise.
 ymean = mean(ycol);
+SST = sum( (ycol-ymean).^2 ); % Total sum of squares.
 
-SSNoise = sum( (ycol-yhat).^2 );
-SST = sum( (ycol-ymean).^2 );
-
-% Find adjusted r2.
+% Find adjusted coefficient of determination, r2adj.
 num = (1/(n-numparamsFull))*SSNoise;
 den = (1/(n-1))*SST;
-r2adj = 1 - num/den;
+r2adj = 1 - num / den;
+fprintf('\nCoefficient of determination = %.3f.\n',r2);
+fprintf('Adjusted coefficient of determination = %.3f.\n',r2adj);
 
-fprintf('\nr2 = %.3f\nr2adj = %.3f\n',r2,r2adj);
-% r2 = 0.548 r2adj = 0.458
+% Find standard error of each parameter.
+E = sum((ycol-yhat).^2);
+SSNoiseFULL = E; % 6.436.
 
-stds = sqrt(diag(M))'; % == 3 sems.
-semint = stds(1);
-semslope1 = stds(2);
-semslope2 = stds(3);
+% M = 3 x 3 matrix, parameter variances of are on diagonal of M.
+M = E/(n-numparamsFull) * inv(X'*X);
+stds = sqrt(diag(M))'; % = 3 sems.
+semb0 = stds(1); semb1 = stds(2); semb2 = stds(3);
 
-tslope1 = abs(slope1 / semslope1);
-tslope2 = abs(slope2 / semslope2);
-tint = abs(intercept / semint);
+% Find t-value of each parameter.
+tb1 = abs(b1/semb1); tb2 = abs(b2/semb2); tb0 = abs(b0/semb0);
 
- pslope1 = mTCDF(tslope1,n-numparamsFull);
- pslope2 = mTCDF(tslope2,n-numparamsFull);
- pintercept = mTCDF(tint,n-numparamsFull);
+% Find p-value of each parameter.
+pb1 = mTCDF(tb1,n-numparamsFull);
+pb2 = mTCDF(tb2,n-numparamsFull);
+pb0 = mTCDF(tb0,n-numparamsFull);
 
 fprintf('\nStatistics of parameters ...\n')
-fprintf('slope1=%.3f\n',slope1);
-fprintf('semslope1=%.3f\n',semslope1);
-fprintf('tslope1=%.3f\n\n',tslope1);
-fprintf('p-value of slope b1=%.3f\n\n',pslope1);
+fprintf('SLOPES:\n');
+fprintf('Slope b1 = %.3f..\n',b1);
+fprintf('Standard error of b1 = %.3f.\n',semb1);
+fprintf('t-value of slope b1 = %.3f.\n',tb1);
+fprintf('p-value of slope b1 = %.3f.\n\n',pb1);
 
-fprintf('slope2=%.3f\n',slope2);
-fprintf('semslope2=%.3f\n',semslope2);
-fprintf('tslope2=%.3f\n\n',tslope2);
-fprintf('p-value of slope b2=%.3f\n\n',pslope2);
+fprintf('Slope b2 = %.3f.\n',b2);
+fprintf('Standard error of b2 = %.3f.\n',semb2);
+fprintf('t-value of b2 = %.3f.\n',tb2);
+fprintf('p-value of slope b2 = %.3f.\n\n',pb2);
 
 fprintf('INTERCEPT:\n');
-fprintf('intercept=%.3f\n',intercept);
-fprintf('semintercept=%.3f\n',semint);
-fprintf('tintercept=%.3f\n',tint);
-fprintf('p-value of inercept b0=%.3f\n\n',pintercept);
+fprintf('Intercept b0 = %.3f.\n',b0);
+fprintf('Standard error of b0 = %.3f.\n',semb0);
+fprintf('t-value of b0 = %.3f.\n',tb0);
+fprintf('p-value of intercept b0 = %.3f.\n\n',pb0);
+fprintf('Coeff of determination (full model) = %.3f.\n',r2); % 0.548.
 
-clear X params; % just to be safe.
 
+% Assess overall fit to plane with F ratio.
+num = r2/(numparamsFull-1);
+den = (1-r2) / (n-numparamsFull);
+F = num  / den;
+p = mFCDF(F,numparamsFull-1,n-numparamsFull);
+fprintf('Full model fit: F = %.3f\n',F); %  6.063.
+fprintf('p-value of Full model, p = %.4f\n',p); % 0.0189.
+%%%%%%%%%%%%%%%%
 % REDUCED MODEL
-XRed =[x1col];
-XRed = [ones(size(ycol)) XRed];       % Prepend ones to intercept term.
+%%%%%%%%%%%%%%%%
+fprintf('\nREDUCED MODEL ...\n'); 
+XRed = [ones(size(ycol)) x1col];  % Prepend ones for b0 term.
 numparamsRed = length(XRed(1,:));
 % Get fitted weighted  regression line.
 paramsRed = inv( XRed'  * XRed) * XRed' * ycol;
 yhat = XRed*paramsRed;
 r2Reduced = var(yhat,1)/var(y,1); 
-SSExplainedReduced = sum((ymean-yhat).^2);
+SSExplainedReduced = sum((ymean-yhat).^2); % 6.643
+fprintf('SS Explained by reduced model=%.3f.\n',SSExplainedReduced);
 
 num = r2Reduced/(numparamsRed-1);
 den = (1-r2Reduced)/(n-numparamsRed);
-FReduced = num/den; %  
-SSExplainedRed = sum((yhat-ymean).^2); % 
-
+FReduced = num/den; %  9.617
+fprintf('Reduced model fit: F = %.3f\n',FReduced); %  9.617.
 pReduced = mFCDF(FReduced, numparamsRed-1, n-numparamsRed);
-fprintf('p-value of Reduced model = %.3f\n',pReduced);
-
-%==========================
+fprintf('p-value of Reduced model = %.3f.\n',pReduced); %  0.010.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Evaluate contribution of second regressor.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('\nEvaluate contribution of second regressor ...\n');
 SSfFullMinusRed = SSExplainedFull - SSExplainedReduced;
-
-SST = var(ycol,1)*n;
+SST = sum((ycol-ymean).^2);
 SSNoise = sum((ycol-yhat).^2);
 SSE = SST-SSExplainedFull;
-MSE = SSNoise/(n-numparamsRed);
+fprintf('\nCoeff of det of full model r2 =%.3f.\n',r2); % 0.548
+fprintf('Coeff of det of reduced model r2 =%.3f.\n\n',r2Reduced); % 0.466.
+fprintf('SS Explained Full model = %.3f.\n',SSExplainedFull); % 7.805.
+fprintf('SS Explained Reduced model=%.3f.\n',SSExplainedReduced);%6.643.
 
-FFullMinusRed = SSfFullMinusRed/MSE;
-
-fprintf('\nr2 of full model =%.3f\n',r2); % r2=0.548
-fprintf('r2 of reduced model =%.3f\n\n',r2Reduced); % r2Reduced=0.466
-
-fprintf('SSExplainedFull=%.3f\n',SSExplainedFull); % =7.805
-fprintf('SSExplainedReduced=%.3f\n',SSExplainedReduced); % =6.643
-fprintf('F =%.3f\n',FFullMinusRed); % F=1.529
-
-pFullMinusRed = mFCDF(FFullMinusRed, numparamsRed-1, n-numparamsRed);
-fprintf('p-value of Full Minus Reduced model = %.3f\n',pFullMinusRed); 
-%  0.221
-
+dfdiff = 1; % Difference in DOF between full and reduced models.
+% Get partial F ratio.
+num = (SSExplainedFull - SSExplainedReduced)/dfdiff;
+den = SSNoiseFULL / (n-numparamsFull);
+Fpartial = num/den; % 1.805
+fprintf('Partial F =%.3f.\n',Fpartial); % F=1.8054
+pFpartial = mFCDF(Fpartial, dfdiff, n-numparamsFull); %  0.2087
+fprintf('p-value of Full Minus Reduced model = %.3f.\n',pFpartial); 
 % END OF FILE.
