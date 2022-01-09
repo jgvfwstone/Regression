@@ -27,6 +27,6 @@ Each example has been tested on a mac (System Version:	OS X 10.15.7), MacBook Ai
 
 Matlab code has been tested using version R2016 (the code is self-contained; no extra libraries are required).
 
-Python code has been tested using the Spyder (3.3.2) python application with Python 3.7.0.
+Python code has been tested using the Spyder (3.3.2) python application with Python 3.7.0 from the Anaconda package.
 
 This file is: https://github.com/jgvfwstone/Regression
